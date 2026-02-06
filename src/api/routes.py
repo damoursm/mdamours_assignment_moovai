@@ -23,3 +23,16 @@ async def analyze_market(request: AnalysisRequest):
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/tools")
+async def list_tools():
+    """Liste les outils disponibles pour l'agent."""
+    return {
+        "tools": [
+            {"name": "scrape_product_data", "description": "Collecte les données produit"},
+            {"name": "analyze_competitors", "description": "Analyse la concurrence"},
+            {"name": "analyze_sentiment", "description": "Analyse le sentiment client"},
+            {"name": "generate_report", "description": "Génère le rapport final"}
+        ]
+    }

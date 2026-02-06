@@ -1,4 +1,3 @@
-from .routes import router
-from .schemas import AnalysisRequest, AnalysisResponse
+from src.api.routes import router
 
-__all__ = ["router", "AnalysisRequest", "AnalysisResponse"]
+__all__ = ["router"]
