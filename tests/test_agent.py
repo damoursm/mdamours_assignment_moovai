@@ -6,7 +6,7 @@ from src.agent.state import AgentState
 
 
 class TestAgentState:
-    """Tests pour l'état de l'agent."""
+    """Tests for agent state."""
 
     def test_agent_state_structure(self):
         state: AgentState = {
@@ -26,7 +26,7 @@ class TestAgentState:
 
 
 class TestMarketAnalysisGraph:
-    """Tests pour le graphe d'orchestration."""
+    """Tests for orchestration graph."""
 
     @pytest.fixture
     def mock_llm_response(self):

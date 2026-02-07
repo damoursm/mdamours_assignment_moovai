@@ -15,7 +15,7 @@ from src.config import get_settings
 
 
 class MarketAnalysisGraph:
-    """Graphe LangGraph pour l'orchestration de l'analyse de marché."""
+    """LangGraph graph for market analysis orchestration."""
 
     def __init__(self):
         settings = get_settings()
@@ -33,7 +33,7 @@ class MarketAnalysisGraph:
         self.graph = self._build_graph()
 
     def _build_graph(self) -> StateGraph:
-        """Construit le graphe d'exécution de l'agent."""
+        """Build the agent execution graph."""
         workflow = StateGraph(AgentState)
 
         workflow.add_node("agent", self._agent_node)
@@ -54,16 +54,16 @@ class MarketAnalysisGraph:
         return workflow.compile()
 
     def _agent_node(self, state: AgentState) -> dict:
-        """Noeud principal de l'agent qui décide des actions."""
-        system_prompt = """Tu es un agent d'analyse de marché e-commerce expert.
+        """Main agent node that decides actions."""
+        system_prompt = """You are an expert e-commerce market analysis agent.
 
-Tu dois analyser le produit demandé en utilisant les outils disponibles dans cet ordre:
-1. scrape_product_data - pour collecter les données du produit
-2. analyze_competitors - pour analyser la concurrence (utilise la catégorie du produit)
-3. analyze_sentiment - pour évaluer le sentiment client
-4. generate_report - pour créer le rapport final (passe les données en JSON)
+You must analyze the requested product using the available tools in this order:
+1. scrape_product_data - to collect product data
+2. analyze_competitors - to analyze competition (use the product category)
+3. analyze_sentiment - to evaluate customer sentiment
+4. generate_report - to create the final report (pass data as JSON)
 
-Exécute chaque outil séquentiellement et utilise les résultats pour le rapport final."""
+Execute each tool sequentially and use the results for the final report."""
 
         messages = [SystemMessage(content=system_prompt)] + state["messages"]
         response = self.llm.invoke(messages)
@@ -71,7 +71,7 @@ Exécute chaque outil séquentiellement et utilise les résultats pour le rappor
         return {"messages": [response]}
 
     def _should_continue(self, state: AgentState) -> Literal["continue", "end"]:
-        """Détermine si l'agent doit continuer ou s'arrêter."""
+        """Determine if the agent should continue or stop."""
         last_message = state["messages"][-1]
 
         if hasattr(last_message, "tool_calls") and last_message.tool_calls:
@@ -79,9 +79,9 @@ Exécute chaque outil séquentiellement et utilise les résultats pour le rappor
         return "end"
 
     def run(self, product_name: str) -> dict:
-        """Exécute l'analyse complète pour un produit."""
+        """Execute complete analysis for a product."""
         initial_state: AgentState = {
-            "messages": [HumanMessage(content=f"Analyse le marché pour le produit: {product_name}")],
+            "messages": [HumanMessage(content=f"Analyze the market for the product: {product_name}")],
             "product_name": product_name,
             "product_data": None,
             "competitor_data": None,

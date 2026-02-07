@@ -11,14 +11,14 @@ class AnalysisType(str, Enum):
 
 
 class AnalysisRequest(BaseModel):
-    """Requête d'analyse de marché."""
-    product_name: str = Field(..., min_length=1, description="Nom du produit à analyser")
-    analysis_type: AnalysisType = Field(default=AnalysisType.FULL, description="Type d'analyse")
-    include_recommendations: bool = Field(default=True, description="Inclure les recommandations")
+    """Market analysis request."""
+    product_name: str = Field(..., min_length=1, description="Product name to analyze")
+    analysis_type: AnalysisType = Field(default=AnalysisType.FULL, description="Analysis type")
+    include_recommendations: bool = Field(default=True, description="Include recommendations")
 
 
 class AnalysisResponse(BaseModel):
-    """Réponse d'analyse de marché."""
+    """Market analysis response."""
     success: bool
     product_name: str
     report: str
@@ -27,6 +27,6 @@ class AnalysisResponse(BaseModel):
 
 
 class HealthResponse(BaseModel):
-    """Réponse de santé de l'API."""
+    """API health response."""
     status: str
     version: str

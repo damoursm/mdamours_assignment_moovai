@@ -13,7 +13,7 @@ class AnalysisStatus(str, Enum):
 
 
 class AnalysisRecord(BaseModel):
-    """Stockage des résultats d'analyse."""
+    """Storage for analysis results."""
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     product_name: str
     analysis_type: str
@@ -21,20 +21,20 @@ class AnalysisRecord(BaseModel):
     created_at: datetime = Field(default_factory=datetime.now)
     completed_at: Optional[datetime] = None
 
-    # Résultats
+    # Results
     product_data: Optional[Dict[str, Any]] = None
     competitor_data: Optional[Dict[str, Any]] = None
     sentiment_data: Optional[Dict[str, Any]] = None
     final_report: Optional[str] = None
 
-    # Métadonnées
+    # Metadata
     execution_time_ms: Optional[float] = None
     steps_executed: int = 0
     errors: List[str] = []
 
 
 class RequestHistory(BaseModel):
-    """Historique des requêtes utilisateur."""
+    """User request history."""
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     user_id: Optional[str] = None
     product_name: str
@@ -46,7 +46,7 @@ class RequestHistory(BaseModel):
 
 
 class CachedData(BaseModel):
-    """Cache des données collectées."""
+    """Cache for collected data."""
     key: str  # Format: "{tool_name}:{input_hash}"
     data: Dict[str, Any]
     created_at: datetime = Field(default_factory=datetime.now)
@@ -56,7 +56,7 @@ class CachedData(BaseModel):
 
 
 class AgentConfiguration(BaseModel):
-    """Configuration des agents."""
+    """Agent configuration."""
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     name: str
     model_name: str = "gpt-4o-mini"

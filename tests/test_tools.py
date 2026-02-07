@@ -8,7 +8,7 @@ from src.tools.base import ToolError, tool_error_handler
 
 
 class TestProductScraper:
-    """Tests pour le scraper de produits."""
+    """Tests for the product scraper."""
 
     def test_scrape_product_data_returns_valid_structure(self, sample_product_name):
         result = scrape_product_data.invoke(sample_product_name)
@@ -28,9 +28,9 @@ class TestProductScraper:
     def test_scraper_service_detects_category(self):
         service = ProductScraperService()
 
-        assert "Audio" in service._detect_category("écouteurs bluetooth")
-        assert "Mobile" in service._detect_category("téléphone samsung")
-        assert "General" in service._detect_category("produit inconnu")
+        assert "Audio" in service._detect_category("bluetooth earbuds")
+        assert "Mobile" in service._detect_category("samsung phone")
+        assert "General" in service._detect_category("unknown product")
 
     def test_scrape_product_data_has_sellers(self, sample_product_name):
         result = scrape_product_data.invoke(sample_product_name)
@@ -40,7 +40,7 @@ class TestProductScraper:
 
 
 class TestCompetitorAnalyzer:
-    """Tests pour l'analyseur de concurrence."""
+    """Tests for the competitor analyzer."""
 
     def test_analyze_competitors_returns_valid_structure(self, sample_category):
         result = analyze_competitors.invoke(sample_category)
@@ -64,12 +64,12 @@ class TestCompetitorAnalyzer:
         result = service.analyze("Electronics/Audio")
 
         assert result.market_concentration in [
-            "Fortement concentré", "Modérément concentré", "Fragmenté"
+            "Highly concentrated", "Moderately concentrated", "Fragmented"
         ]
 
 
 class TestSentimentAnalyzer:
-    """Tests pour l'analyseur de sentiment."""
+    """Tests for the sentiment analyzer."""
 
     def test_analyze_sentiment_returns_valid_structure(self, sample_product_name):
         result = analyze_sentiment.invoke(sample_product_name)
@@ -95,7 +95,7 @@ class TestSentimentAnalyzer:
 
 
 class TestReportGenerator:
-    """Tests pour le générateur de rapports."""
+    """Tests for the report generator."""
 
     def test_generate_report_returns_markdown(
         self, sample_product_data, sample_competitor_data, sample_sentiment_data
@@ -107,8 +107,8 @@ class TestReportGenerator:
         })
 
         assert "# " in result  # Markdown headers
-        assert "Rapport" in result
-        assert "Recommandations" in result
+        assert "Report" in result
+        assert "Recommendations" in result
 
     def test_generate_report_contains_product_info(
         self, sample_product_data, sample_competitor_data, sample_sentiment_data
@@ -125,12 +125,12 @@ class TestReportGenerator:
         service = ReportGeneratorService()
         result = service.generate("{}", "{}", "{}")
 
-        assert "Rapport" in result
-        assert "non disponibles" in result or "N/A" in result
+        assert "Report" in result
+        assert "not available" in result or "N/A" in result
 
 
 class TestToolErrorHandling:
-    """Tests pour la gestion des erreurs."""
+    """Tests for error handling."""
 
     def test_tool_error_contains_tool_name(self):
         error = ToolError("test_tool", "Test error message")

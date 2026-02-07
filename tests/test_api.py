@@ -10,7 +10,7 @@ def client():
 
 
 class TestHealthEndpoint:
-    """Tests pour l'endpoint de santé."""
+    """Tests for the health endpoint."""
 
     def test_health_check_returns_200(self, client):
         response = client.get("/api/v1/health")
@@ -25,7 +25,7 @@ class TestHealthEndpoint:
 
 
 class TestRootEndpoint:
-    """Tests pour l'endpoint racine."""
+    """Tests for the root endpoint."""
 
     def test_root_returns_info(self, client):
         response = client.get("/")
@@ -36,7 +36,7 @@ class TestRootEndpoint:
 
 
 class TestToolsEndpoint:
-    """Tests pour l'endpoint des outils."""
+    """Tests for the tools endpoint."""
 
     def test_list_tools_returns_tools(self, client):
         response = client.get("/api/v1/tools")
@@ -47,7 +47,7 @@ class TestToolsEndpoint:
 
 
 class TestAnalyzeEndpoint:
-    """Tests pour l'endpoint d'analyse."""
+    """Tests for the analyze endpoint."""
 
     def test_analyze_requires_product_name(self, client):
         response = client.post("/api/v1/analyze", json={})
@@ -71,7 +71,7 @@ class TestAnalyzeEndpoint:
 
         response = client.post(
             "/api/v1/analyze",
-            json={"product_name": "écouteurs sans fil"}
+            json={"product_name": "wireless earbuds"}
         )
 
         assert response.status_code == 200
@@ -91,7 +91,7 @@ class TestAnalyzeEndpoint:
 
 
 class TestAnalysisRequestValidation:
-    """Tests pour la validation des requêtes."""
+    """Tests for request validation."""
 
     def test_valid_full_analysis_type(self, client):
         with patch('src.api.routes.MarketAnalysisGraph') as mock:

@@ -7,7 +7,7 @@ from datetime import datetime
 
 
 class ToolResult(BaseModel):
-    """Résultat standardisé pour tous les outils."""
+    """Standardized result for all tools."""
     success: bool
     data: Optional[Dict[str, Any]] = None
     error: Optional[str] = None
@@ -16,7 +16,7 @@ class ToolResult(BaseModel):
 
 
 class ToolError(Exception):
-    """Exception personnalisée pour les erreurs d'outils."""
+    """Custom exception for tool errors."""
     def __init__(self, tool_name: str, message: str, original_error: Optional[Exception] = None):
         self.tool_name = tool_name
         self.message = message
@@ -25,7 +25,7 @@ class ToolError(Exception):
 
 
 def tool_error_handler(tool_name: str):
-    """Décorateur pour la gestion centralisée des erreurs."""
+    """Decorator for centralized error handling."""
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
@@ -45,7 +45,7 @@ def tool_error_handler(tool_name: str):
 
 
 def setup_logging():
-    """Configure le logging pour les outils."""
+    """Configure logging for tools."""
     logging.basicConfig(
         level=logging.INFO,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'

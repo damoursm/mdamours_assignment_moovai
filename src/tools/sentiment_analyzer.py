@@ -11,14 +11,14 @@ logger = logging.getLogger(__name__)
 
 
 class SentimentBreakdown(BaseModel):
-    """Répartition des sentiments."""
+    """Sentiment distribution."""
     positive: float = Field(ge=0, le=1)
     negative: float = Field(ge=0, le=1)
     neutral: float = Field(ge=0, le=1)
 
 
 class ThemeAnalysis(BaseModel):
-    """Analyse thématique des avis."""
+    """Thematic analysis of reviews."""
     theme: str
     mention_count: int
     sentiment: str
@@ -26,7 +26,7 @@ class ThemeAnalysis(BaseModel):
 
 
 class ReviewSample(BaseModel):
-    """Exemple d'avis représentatif."""
+    """Representative review sample."""
     text: str
     rating: int = Field(ge=1, le=5)
     sentiment: str
@@ -34,7 +34,7 @@ class ReviewSample(BaseModel):
 
 
 class SentimentAnalysisResult(BaseModel):
-    """Résultat complet de l'analyse de sentiment."""
+    """Complete sentiment analysis result."""
     product: str
     analysis_date: str
     overall_score: float = Field(ge=0, le=5)
@@ -49,44 +49,44 @@ class SentimentAnalysisResult(BaseModel):
 
 
 class SentimentAnalyzerService:
-    """Service d'analyse de sentiment des avis clients."""
+    """Customer review sentiment analysis service."""
 
     POSITIVE_THEMES = [
-        ("qualité audio", "Excellente qualité sonore mentionnée"),
-        ("confort", "Confort de port apprécié"),
-        ("autonomie", "Bonne autonomie de batterie"),
-        ("rapport qualité-prix", "Bon rapport qualité-prix"),
-        ("design", "Design moderne et élégant"),
-        ("facilité d'utilisation", "Prise en main intuitive"),
-        ("bluetooth stable", "Connexion fiable"),
+        ("audio quality", "Excellent sound quality mentioned"),
+        ("comfort", "Wearing comfort appreciated"),
+        ("battery life", "Good battery autonomy"),
+        ("value for money", "Good value for money"),
+        ("design", "Modern and elegant design"),
+        ("ease of use", "Intuitive setup"),
+        ("stable bluetooth", "Reliable connection"),
     ]
 
     NEGATIVE_THEMES = [
-        ("fragilité", "Problèmes de durabilité signalés"),
-        ("SAV", "Service après-vente critiqué"),
-        ("notice", "Documentation insuffisante"),
-        ("prix", "Perçu comme trop cher"),
-        ("bruit", "Isolation phonique insuffisante"),
-        ("micro", "Qualité micro décevante"),
+        ("durability", "Durability issues reported"),
+        ("customer service", "Customer service criticized"),
+        ("manual", "Insufficient documentation"),
+        ("price", "Perceived as too expensive"),
+        ("noise", "Insufficient noise isolation"),
+        ("microphone", "Disappointing microphone quality"),
     ]
 
     SAMPLE_POSITIVE_REVIEWS = [
-        "Excellent produit, je recommande vivement ! La qualité audio est impressionnante.",
-        "Très satisfait de mon achat. Le confort est au rendez-vous même après plusieurs heures.",
-        "Rapport qualité-prix imbattable. L'autonomie dépasse mes attentes.",
+        "Excellent product, highly recommend! The audio quality is impressive.",
+        "Very satisfied with my purchase. Comfort is great even after several hours.",
+        "Unbeatable value for money. Battery life exceeds my expectations.",
     ]
 
     SAMPLE_NEGATIVE_REVIEWS = [
-        "Déçu par la qualité. Le produit a lâché après 3 mois d'utilisation.",
-        "SAV catastrophique, impossible d'avoir une réponse.",
-        "Trop cher pour ce que c'est. Je m'attendais à mieux.",
+        "Disappointed by the quality. The product broke after 3 months of use.",
+        "Terrible customer service, impossible to get a response.",
+        "Too expensive for what it is. I expected better.",
     ]
 
     def __init__(self):
         self.logger = logging.getLogger(f"{__name__}.SentimentAnalyzerService")
 
     def _generate_theme_analysis(self, theme: tuple, sentiment: str) -> ThemeAnalysis:
-        """Génère une analyse thématique."""
+        """Generate thematic analysis."""
         return ThemeAnalysis(
             theme=theme[0],
             mention_count=random.randint(50, 500),
@@ -95,7 +95,7 @@ class SentimentAnalyzerService:
         )
 
     def _generate_sample_reviews(self) -> List[ReviewSample]:
-        """Génère des exemples d'avis représentatifs."""
+        """Generate representative review samples."""
         samples = []
         for review in random.sample(self.SAMPLE_POSITIVE_REVIEWS, 2):
             samples.append(ReviewSample(
@@ -114,29 +114,29 @@ class SentimentAnalyzerService:
         return samples
 
     def _calculate_nps(self, positive_ratio: float, negative_ratio: float) -> int:
-        """Calcule le Net Promoter Score."""
+        """Calculate Net Promoter Score."""
         promoters = positive_ratio * 0.8
         detractors = negative_ratio * 0.9
         return int((promoters - detractors) * 100)
 
     def _determine_trend(self, overall_score: float) -> str:
-        """Détermine la tendance du sentiment."""
+        """Determine sentiment trend."""
         if overall_score >= 4.0:
-            return "↑ En hausse"
+            return "↑ Rising"
         elif overall_score >= 3.0:
             return "→ Stable"
-        return "↓ En baisse"
+        return "↓ Declining"
 
     def _assess_confidence(self, total_reviews: int) -> str:
-        """Évalue le niveau de confiance de l'analyse."""
+        """Assess analysis confidence level."""
         if total_reviews >= 1000:
-            return "Élevé"
+            return "High"
         elif total_reviews >= 500:
-            return "Moyen"
-        return "Faible"
+            return "Medium"
+        return "Low"
 
     def analyze(self, product_name: str) -> SentimentAnalysisResult:
-        """Exécute l'analyse de sentiment complète."""
+        """Execute complete sentiment analysis."""
         self.logger.info(f"Analyzing sentiment for: {product_name}")
 
         positive_ratio = random.uniform(0.65, 0.85)
@@ -183,20 +183,20 @@ class SentimentAnalyzerService:
 @tool
 @tool_error_handler("analyze_sentiment")
 def analyze_sentiment(product_name: str) -> Dict[str, Any]:
-    """Analyse le sentiment des avis clients pour un produit.
+    """Analyze customer review sentiment for a product.
 
-    Fournit une analyse détaillée incluant:
-    - Score global et répartition des sentiments
-    - Thèmes clés positifs et négatifs avec impact
+    Provides detailed analysis including:
+    - Overall score and sentiment distribution
+    - Key positive and negative themes with impact
     - Net Promoter Score (NPS)
-    - Tendance et exemples d'avis
-    - Niveau de confiance de l'analyse
+    - Trend and review samples
+    - Analysis confidence level
 
     Args:
-        product_name: Le nom du produit à analyser
+        product_name: The product name to analyze
 
     Returns:
-        Analyse de sentiment complète avec insights actionnables
+        Complete sentiment analysis with actionable insights
     """
     service = SentimentAnalyzerService()
     result = service.analyze(product_name)
