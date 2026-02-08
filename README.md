@@ -16,23 +16,6 @@ This project implements an autonomous agent that analyzes market data for produc
 - Python 3.13
 - Google API Key (for Gemini models)
 
-## Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/damoursm/mathieu_damours_assignment.git
-cd market-analysis-agent
-
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Configure environment
-cp .env.example .env
-```
 
 ## Configuration
 
@@ -130,10 +113,11 @@ graph LR
 
 ```
 market-analysis-agent/
-├── main.py                 # FastAPI application entry point
-├── requirements.txt        # Python dependencies
+├── main.py                # FastAPI application entry point
+├── requirements.txt       # Python dependencies
 ├── Dockerfile             # Docker configuration
 ├── docker-compose.yml     # Docker Compose configuration
+├── .env                   # Environment variables
 ├── .env.example           # Environment variables template
 ├── src/
 │   ├── config.py          # Application settings
@@ -176,11 +160,9 @@ pytest tests/ -v --cov=src
 ```bash
 # Build and run with Docker Compose
 docker-compose up --build
-
-# Or build manually
-docker build -t market-analysis-agent .
-docker run -p 8000:8000 --env-file .env market-analysis-agent
 ```
+
+Use http://localhost:8000/docs#/analysis/analyze_market_api_v1_analyze_post to generate the report for a particular product. 
 
 ## 4: Data Architecture and Storage
 
