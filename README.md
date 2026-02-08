@@ -184,13 +184,6 @@ docker run -p 8000:8000 --env-file .env market-analysis-agent
 
 ## 4: Data Architecture and Storage
 
-    Component	        Technology	    Purpose
-    Primary Database	PostgreSQL	    Persistent storage for results and history
-    Cache Layer	        Redis	            Fast access to frequently requested data
-    Message Queue	        Redis Streams       Async task processing and rate limiting
-    File Storage	        S3 / MinIO	    Large reports and export
-
-
 ### Technology Justification
 #### PostgreSQL
 - Free and open source. I would use PostgreSQL first and reevaluate in the longer if we should change. 

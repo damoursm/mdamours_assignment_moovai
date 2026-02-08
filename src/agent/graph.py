@@ -63,7 +63,9 @@ You must analyze the requested product using the available tools in this order:
 3. analyze_sentiment - to evaluate customer sentiment
 4. generate_report - to create the final report (pass data as JSON)
 
-Execute each tool sequentially and use the results for the final report."""
+Execute each tool sequentially and use the results for the final report.
+IMPORTANT: You MUST call generate_report as the final step. Do not just summarize the results yourself.
+If you have called generate_report, your job is done."""
 
         messages = [SystemMessage(content=system_prompt)] + state["messages"]
         response = self.llm.invoke(messages)
@@ -93,10 +95,38 @@ Execute each tool sequentially and use the results for the final report."""
 
         result = self.graph.invoke(initial_state)
 
-        final_message = result["messages"][-1].content if result["messages"] else ""
+        # Extract the final report from the messages
+        # We look for the output of the generate_report tool
+        final_report = ""
+        for message in reversed(result["messages"]):
+            if hasattr(message, "tool_calls") and message.tool_calls:
+                # This is an AI message calling a tool, check if it called generate_report
+                if message.tool_calls[0]['name'] == 'generate_report':
+                    # The next message should be the tool output
+                    continue
+            
+            if hasattr(message, "content") and "📊 Market Analysis Report" in str(message.content):
+                 final_report = message.content
+                 break
+            
+            # Fallback: if the LLM just printed the report content directly (less likely with tool use but possible)
+            if isinstance(message, HumanMessage) is False and "📊 Market Analysis Report" in str(message.content):
+                 final_report = message.content
+                 break
+
+        # If we still don't have a report, try to find the last tool message which might be the report
+        if not final_report:
+             for message in reversed(result["messages"]):
+                 if hasattr(message, "name") and message.name == "generate_report":
+                     final_report = message.content
+                     break
+
+        # If still empty, use the last message content as a fallback
+        if not final_report and result["messages"]:
+            final_report = result["messages"][-1].content
 
         return {
             "product_name": product_name,
-            "report": final_message,
+            "report": final_report,
             "steps_executed": len(result["messages"])
         }
